@@ -16,16 +16,16 @@
 
 (defn start [port]
   (let [port (Integer. (or port (env :port) 5000))]
-    (swap! server
-           (fn [_] (start-http-server handler
-                                      {:port port
-                                       :websocket true})))
+    (reset! server
+            (start-http-server handler
+                               {:port port
+                                :websocket true}))
     (logging/info (str "Started with port " port))))
 
 (defn stop []
   (when @server
     (@server)
-    (swap! server (fn [_] nil))))
+    (reset! server nil)))
 
 (defn -main [& [port]]
   (start port))
